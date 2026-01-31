@@ -396,4 +396,4 @@ com.example.project
 
 ### Fin 
 Il y a evidemment beaucoup plus de choses à voir en détails sur Spring boot et java, mais ça permet d'introduire le tout :D  
-Si jamais tu as besoin de resources (en anglais): https://roadmap.sh/java
+Si jamais tu as besoin de resources (en français) sur java: https://www.jmdoudoux.fr/java/dej/index.htm
