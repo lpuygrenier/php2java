@@ -8,6 +8,7 @@ import com.example.demo.service.mapper.UserMapper;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserDTO> findAll() {
         return userRepository
@@ -38,14 +40,21 @@ public class UserService {
 
     public UserDTO save(UserDTO dto) {
         User entity = userMapper.toEntity(dto);
+        if (entity.getPassword() != null && !entity.getPassword().startsWith("$2a$")) {
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        }
         return userMapper.toDto(userRepository.save(entity));
     }
 
     public UserDTO update(Long id, UserDTO dto) {
         return userRepository.findById(id)
-                .map(ignored -> {
+                .map(existing -> {
                     User updated = userMapper.toEntity(dto);
-                    updated.setId(id);
+                    if (updated.getPassword() != null && !updated.getPassword().startsWith("$2a$")) {
+                        updated.setPassword(passwordEncoder.encode(updated.getPassword()));
+                    } else if (updated.getPassword() == null) {
+                        updated.setPassword(existing.getPassword());
+                    }
                     return userMapper.toDto(userRepository.save(updated));
                 })
                 .orElseThrow(() -> new NotFoundAlertException(ENTITY_NAME, "update", "User not found with id %s".formatted(id)));
