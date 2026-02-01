@@ -136,6 +136,35 @@ public class User {
 ```
 
 ## 2. Symfony vers Spring boot
+### Principe du pattern MVC
+Le pattern MVC signifie Model – View – Controller et sert à bien organiser une application web en trois couches séparées :
+• Model : contient les données et la logique métier (entités JPA, services, accès base de données, etc.).
+• View : gère ce que voit l’utilisateur, dans le cas d'un projet avec un backend renvoyant du JSON, on peut considérer le front comme la vue.
+• Controller (Contrôleur) : Intermédiaire entre le modèle et la vue. Il reçoit les requêtes HTTP, appelle le modèle (services, repositories) et la réponse JSON appropriée.
+
+Les bénéfices principaux sont :
+- Séparation des responsabilités, chaque partie à une seule mission
+- Modularité,
+
+##### DTO et contrat d'interface 
+Le Data Transfert Object est un objet dont comme son nom l'indique, est utilisé pour le transfert de données. Dans un contexte d'un projet utilisant des contrôleurs retournant du json, ils correspondent aux champs du json que l'on veut retourner.
+
+Utiliser cette technique permet de séparer la responsabilité des parties services/métier de la partie repository. (Ex: si demain, pour X raison, toute la partie base de données doit être réfondue d'une manière différente, mais que nos applications front doivent consommer les mêmes données, alors on aura besoin de toucher uniquement la partie repository/service)
+
+Cette encapsulation permet aussi de définir un contrat d'interface avec le front, c'est à dire que le back et front se mettent d'accord sur les routes et leurs formats de retour (Donc les DTO). Ce qui permet de paralléliser et simplifier le développement des parties. Le back sait ce qu'il doit retourner, indépendamment de la base de données et le front sait ce qu'il obtiendra du back, même si le développement de la route n'a pas encore été fait.
+
+### Créer un projet spring boot
+Il existe plusieurs façons de créer un projet spring boot. En voici deux :
+- Utiliser le starter officiel de spring boot via le lien https://start.spring.io/
+- Utiliser le générateur jhipster via le lien https://start.jhipster.tech/generate-application ou via la commande jhipster (voir https://www.jhipster.tech/creating-an-app/)
+
+##### Version officielle 
+Elle permet de générer un projet de base vide avec uniquement ce dont on a besoin. 
+Les dépendances seront à ajouter manuellement, par exemple les drivers postgres, les bibliothèques Spring data JPA permettant de générer les appels vers la base de données.
+
+##### Version jhipster
+Jhipster est un générateur de projet web utilisant java spring boot. Il permet aussi d'inclure un front (react, angular, vue) dans le projet. Il se charge de créer un projet taillé pour le web, avec des configurations prêtes à l'emploi.
+
 ### Gestion des dépendances
 
 Maven (ou Gradle) est l'équivalent de composer. Il permet la gestion des dépendances, le packaging et build. Le fichier maven est pom.xml. 
